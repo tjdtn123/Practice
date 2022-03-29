@@ -105,12 +105,12 @@ public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
     }
 
     @Override
-    public List<Map<String, Object>> getSingerSongCnt(String colNm) throws Exception {
+    public List<MelonDTO> getSingerSongCnt(String colNm) throws Exception {
 
         log.info(this.getClass().getName() + ".getSingerSongCnt Start!");
 
         // 조회 결과를 전달하기 위한 객체 생성하기
-        List<Map<String, Object>> rList = new LinkedList<Map<String, Object>>();
+        List<MelonDTO> rList = new LinkedList<MelonDTO>();
 
         // MongoDB 조회 쿼리
         List<? extends Bson> pipeline = Arrays.asList(
@@ -138,14 +138,13 @@ public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
             log.info("singer : " + singer);
             log.info("singerCnt : " + singerCnt);
 
-            Map<String, Object> rMap = new LinkedHashMap<String, Object>();
+            MelonDTO rDTO = new MelonDTO();
+            rDTO.setSinger(singer);
+            rDTO.setSingerCnt(singerCnt);
 
-            rMap.put("singer", singer);
-            rMap.put("singerCnt", singerCnt);
+            rList.add(rDTO);
 
-            rList.add(rMap);
-
-            rMap = null;
+            rDTO = null;
             doc = null;
         }
 
@@ -158,5 +157,79 @@ public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
 
         return rList;
     }
+
+    @Override
+    public List<MelonDTO> getSingerSong(String pColNm, String pSinger) throws Exception{
+
+        log.info((this.getClass().getName() + ".getSingerSong Start!"));
+
+        List<MelonDTO> rList = new LinkedList<>();
+
+        MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+        Document query = new Document();
+        query.append("singer", pSinger);
+
+        Document projection = new Document();
+        projection.append("song", "$song");
+        projection.append("singer", "$singer");
+
+        projection.append("_id", 0);
+
+        FindIterable<Document> rs = col.find(query).projection(projection);
+
+        for (Document doc : rs) {
+            if (doc == null) {
+                doc = new Document();
+            }
+
+            String song = CmmUtil.nvl(doc.getString("song"));
+            String singer = CmmUtil.nvl(doc.getString("singer"));
+
+            log.info("song :" + song);
+            log.info("mysinger : " + singer);
+
+            MelonDTO rDTO = new MelonDTO();
+
+            rDTO.setSong(song);
+            rDTO.setSinger(singer);
+
+            rList.add(rDTO);
+        }
+        log.info(this.getClass().getName() + ".getSingerSong End!");
+
+        return rList;
+    }
+
+    @Override
+    public int insertSongMany(List<MelonDTO> pList, String colNm) throws Exception{
+
+        log.info(this.getClass().getName() + ".insertSongMany Start!");
+
+        int res = 0;
+
+        if (pList == null) {
+            pList = new LinkedList<>();
+        }
+
+        super.createCollection(colNm, "collectTime");
+
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+
+        List<Document> list = new ArrayList<>();
+
+        pList.stream().forEach(melon -> list.add(new Document(new ObjectMapper().convertValue(melon, Map.class))));
+        //      병렬처리     반목  익명함수(뭐할래)                    형 변환    Document의 부모는 Map     melondto를 Map데이터로 바꾸겠다
+        // melondto 형태를 Map형태로 바꾸고 document형태로 바꿔줌
+
+        col.insertMany(list);
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".insertSongMany End!");
+
+        return res;
+    }
+
 
 }

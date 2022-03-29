@@ -30,6 +30,13 @@ public interface IMelonMapper {
      * @param colNm 조회할 컬렉션 이름
      * @return 노래 리스트
      */
-    List<Map<String, Object>> getSingerSongCnt(String colNm) throws Exception;
+    List<MelonDTO> getSingerSongCnt(String colNm) throws Exception;
+
+
+
+
+    List<MelonDTO> getSingerSong(String colNm, String singer) throws Exception;
+
+    int insertSongMany(List<MelonDTO> pList, String colNm) throws Exception;
 
 }

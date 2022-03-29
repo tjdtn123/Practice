@@ -1,4 +1,4 @@
-package kopo.poly.persistance.mapper;
+package kopo.poly.persistance.mongodb.mapper;
 
 import kopo.poly.dto.NoticeDTO;
 import org.apache.ibatis.annotations.Mapper;

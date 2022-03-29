@@ -11,7 +11,11 @@ public interface IMelonService {
 
     List<MelonDTO> getSongList() throws Exception;
 
-    List<Map<String, Object>> getSingerSongCnt() throws Exception;
+    List<MelonDTO> getSingerSongCnt() throws Exception;
+
+    List<MelonDTO> getSingerSong() throws Exception;
+
+    int collectMelonSongMany() throws Exception;
 
 
 }
