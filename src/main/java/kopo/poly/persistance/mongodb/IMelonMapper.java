@@ -39,4 +39,19 @@ public interface IMelonMapper {
 
     int insertSongMany(List<MelonDTO> pList, String colNm) throws Exception;
 
+    int dropMelonCollection(String colNm) throws Exception;
+
+    int updateSong(String colNm, String singer, String updateSinger) throws Exception;
+
+    int updateSongAddField(String colNm, String singer, String nickname) throws Exception;
+
+    int updateSongAddListField(String colNm, String singer, List<String> member) throws Exception;
+
+    int updateManySong(String colNm, String singer, String updateSinger, String updateSong) throws Exception;
+
+    int deleteSong(String colNm, String singer) throws  Exception;
+
+
+
+
 }

@@ -196,4 +196,125 @@ public class MelonService implements IMelonService {
         return res;
     }
 
+    @Override
+    public int updateBTSName() throws  Exception{
+
+        log.info(this.getClass().getName() + ".updateBTSName Start!");
+
+        int res = 0;
+
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        melonMapper.dropMelonCollection(colNm);
+
+        if (this.collectMelonSong() == 1) {
+
+            String singer = "방탄소년단";
+            String updateSinger = "BTS";
+
+            res = melonMapper.updateSong(colNm, singer, updateSinger);
+        }
+
+        log.info(this.getClass().getName() + ".updateBTSName End!");
+
+        return res;
+    }
+
+    @Override
+    public int updateAddBTSNickname() throws  Exception{
+
+        log.info(this.getClass().getName() + ".updateAddBTSNickname Start!");
+
+        int res = 0;
+
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        melonMapper.dropMelonCollection(colNm);
+
+        if (this.collectMelonSong() == 1) {
+
+            String singer = "방탄소년단";
+            String nickname = "BTS";
+
+            res = melonMapper.updateSongAddField(colNm, singer, nickname);
+        }
+
+        log.info(this.getClass().getName() + ".updateAddBTSNickname End!");
+
+        return res;
+    }
+
+    @Override
+    public int updateAddBTSMember() throws  Exception{
+
+        log.info(this.getClass().getName() + ".updateAddBTSMember Start!");
+
+        int res = 0;
+
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        melonMapper.dropMelonCollection(colNm);
+
+        if (this.collectMelonSong() == 1) {
+
+            String singer = "방탄소년단";
+            String[] member = {"정국", "뷔", "지민", "슈가", "진", "제이홉", "RM"};
+
+            res = melonMapper.updateSongAddListField(colNm, singer, Arrays.asList(member));
+        }
+
+        log.info(this.getClass().getName() + ".updateAddBTSNickname End!");
+
+        return res;
+    }
+
+    @Override
+    public int updateManySong() throws Exception {
+        // 로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악하기 용이하다.)
+        log.info(this.getClass().getName() + ".updateManySong Start!");
+
+        int res = 0;
+
+        // 수정할 컬렉션
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        // 기존 수집된 멜론Top100 수집한 컬렉션 삭제하기
+        melonMapper.dropMelonCollection(colNm);
+
+        // 멜론Top100 수집하기
+        if (this.collectMelonSong() == 1) {
+            String singer = "방탄소년단"; // 수정할 가수 이름
+            String updateSinger = "BTS"; // 변경될 가수이름
+            String updateSong = "BTS-SONG"; // 변경될 노래제목
+
+            res = melonMapper.updateManySong(colNm, singer, updateSinger, updateSong);
+
+        }
+
+        // 로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악하기 용이하다.)
+        log.info(this.getClass().getName() + ".updateManySong End!");
+
+        return res;
+
+    }
+
+
+    @Override
+    public int deleteSong() throws  Exception{
+
+        log.info(this.getClass().getName() + ".deleteSong Start!");
+
+        int res = 0;
+
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        String singer = "방탄소년단";
+
+        res = melonMapper.deleteSong(colNm, singer);
+
+        log.info(this.getClass().getName() + ".deleteSong End!");
+
+        return res;
+    }
+
 }

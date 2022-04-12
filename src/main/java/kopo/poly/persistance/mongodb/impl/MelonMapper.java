@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+import static com.mongodb.client.model.Updates.set;
+
 @Slf4j
 @Component("MelonMapper")
 public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
@@ -231,5 +233,156 @@ public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
         return res;
     }
 
+    @Override
+    public int dropMelonCollection(String colNm) throws Exception{
+
+        log.info(this.getClass().getName() + ".dropMelonCollection Start!");
+
+        int res = 0;
+
+        super.dropCollection(colNm);
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".dropMelonCollection End!");
+
+        return res;
+    }
+
+    @Override
+    public int updateSong(String pColNm, String pSinger, String pUpdateSinger) throws  Exception {
+
+        log.info(this.getClass().getName() + ".updateSong Start!");
+
+        int res = 0;
+
+        MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+        log.info("pColNm : " + pColNm);
+
+        Document query = new Document();
+        query.append("singer", pSinger);
+
+        FindIterable<Document> rs = col.find(query);
+
+        rs. forEach(doc -> col.updateOne(doc, new Document("$set", new Document("singer", "BTS"))));
+
+        res = 1;
+
+        log.info((this.getClass().getName() + ".updateSong End"));
+
+        return  res;
+    }
+
+    @Override
+    public int updateSongAddField(String pColNm, String pSinger, String pNickname) throws  Exception {
+
+        log.info(this.getClass().getName() + ".updateSongAddField Start!");
+
+        int res = 0;
+
+        MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+        log.info("pColNm : " + pColNm);
+        log.info("pSinger : " + pSinger);
+
+        Document query = new Document();
+        query.append("singer", pSinger);
+
+        FindIterable<Document> rs = col.find(query);
+
+        rs.forEach(doc -> col.updateOne(doc, set("nickname", pNickname)));
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".updateSong End");
+
+        return  res;
+    }
+
+    @Override
+    public int updateSongAddListField(String pColNm, String pSinger, List<String> pMember) throws  Exception {
+
+        log.info(this.getClass().getName() + ".updateSongAddListField Start!");
+
+        int res = 0;
+
+        MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+        log.info("pColNm : " + pColNm);
+        log.info("pSinger : " + pSinger);
+
+        Document query = new Document();
+        query.append("singer", pSinger);
+
+        FindIterable<Document> rs = col.find(query);
+
+        rs.forEach(doc -> col.updateOne(doc, set("member", pMember)));
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".updateSongAddField End!");
+
+        return  res;
+    }
+
+    @Override
+    public int updateManySong(String pColNm, String pSinger, String pUpdateSinger, String pUpdateSong) throws Exception {
+        log.info(this.getClass().getName() + ".updateManySong Start!");
+
+        int res = 0;
+
+        MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+        log.info("pColNm : " + pColNm);
+        log.info("pSinger : " + pSinger);
+        log.info("pUpdateSinger : " + pUpdateSinger);
+        log.info("pUpdateSong : " + pUpdateSong);
+
+
+        Document query = new Document();
+        query.append("singer", pSinger);
+
+
+        FindIterable<Document> rs = col.find(query);
+
+
+        Document updateDoc = new Document();
+        updateDoc.append("singer", pUpdateSinger); // 기존 필드 수정
+        updateDoc.append("song", pUpdateSong); // 기존 필드 수정
+        updateDoc.append("addData", "난 기존 필드 수정과 동시에 추가하는 데이터"); // 신규 필드 추가
+
+        rs.forEach(doc -> col.updateOne(doc, new Document("$set", updateDoc)));
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".updateManySong End!");
+
+        return res;
+
+    }
+
+    @Override
+    public int deleteSong(String pColNm, String pSinger) throws  Exception {
+
+        log.info(this.getClass().getName() + ".deleteSong Start!");
+
+        int res = 0;
+
+        MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+        Document query = new Document();
+        query.append("singer", pSinger);
+
+        FindIterable<Document> rs = col.find(query);
+
+        rs.forEach(doc -> col.deleteOne(doc));
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".updateSongAddField End!");
+
+        return  res;
+    }
 
 }
