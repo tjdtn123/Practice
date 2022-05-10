@@ -3,6 +3,7 @@ package kopo.poly.service;
 import kopo.poly.dto.RedisDTO;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IMyRedisService {
     int saveRedisString() throws Exception;
@@ -22,4 +23,13 @@ public interface IMyRedisService {
     int saveRedisListJSONRamda() throws Exception;
 
     List<RedisDTO> getRedisListJSONRamda() throws Exception;
+
+    int saveRedisHash() throws Exception;
+
+    RedisDTO getRedisHash()throws Exception;
+
+    int saveRedisSetJSONRamda() throws Exception;
+
+    Set<RedisDTO> getRedisSetJSONRamda() throws Exception;
 }
+

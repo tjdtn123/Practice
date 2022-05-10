@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -165,5 +166,68 @@ public class RedisController {
         log.info(this.getClass().getName() + ".getRedisListJSONRamda End!");
 
         return rList;
+    }
+
+    @GetMapping(value = "redis/saveRedisHash")
+    public  String SaveRedisHash() throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisHash Start!");
+
+        String msg;
+
+        int res = myRedisService.saveRedisHash();
+
+        if(res == 1) {
+            msg = "success";
+
+        } else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".saveRedisHash End!");
+
+        return msg;
+    }
+    @GetMapping(value = "redis/getRedisHash")
+    public RedisDTO getRedisHash()throws Exception{
+
+        log.info(this.getClass().getName() + ".getRedisHash Start!");
+
+        RedisDTO rDTO = myRedisService.getRedisHash();
+
+        log.info(this.getClass().getName() + ".getRedisHash End!");
+
+        return rDTO;
+    }
+    @GetMapping(value = "redis/saveRedisSetJSONRamda")
+    public  String SaveRedisSetJSONRamda() throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisSetJSONRamda Start!");
+
+        String msg;
+
+        int res = myRedisService.saveRedisSetJSONRamda();
+
+        if(res == 1) {
+            msg = "success";
+
+        } else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".saveRedisSetJSONRamda End!");
+
+        return msg;
+    }
+    @GetMapping(value = "redis/getRedisSetJSONRamda")
+    public Set<RedisDTO> getRedisSetJSONRamda()throws Exception{
+
+        log.info(this.getClass().getName() + ".getRedisSetJSONRamda Start!");
+
+        Set<RedisDTO> rSet = myRedisService.getRedisSetJSONRamda();
+
+        log.info(this.getClass().getName() + ".getRedisSetJSONRamda End!");
+
+        return rSet;
     }
 }
